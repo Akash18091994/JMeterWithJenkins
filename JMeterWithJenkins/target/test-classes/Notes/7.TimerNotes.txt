@@ -1,0 +1,13 @@
+Timer - 
+Timers are use to pause steps execution for specified period of time.
+
+Constant Time - 
+With this timer, pause between each step execution for specified period of time.
+
+Gaussian Random Time - 
+In this timer, we have fixed delay time (i.e. Constant Delay Offset) and random time (i.e. Deviation).
+Pause between each step will be = Constant Delay Offset + Any number of milliecond between specified Deviation. 
+
+Constant Throughput Timer - 
+In this timer, if current execution Throughput count is more than specified 'Target Throughput' numbers then further threads hit will pause untill throughput of current execution becomes lower than lTarget Throughput'.
+

@@ -1,0 +1,8 @@
+Data Driven CSV file data - 
+
+Suppose we want to pass data (userName, Password, Country) from CSV to API call then use CSV Data Set Config.
+
+Create CSV in which each person's (userName, Password, Country) in each row.
+Right click on Thread Group - Config Element - CSV Data Set Config.
+Add 'Name', 'Comments', 'Filename', 'Variable Names' (like this --> username,password,country), Keep 'Delimiter' as ',', Set 'Recycle on EOF' as True if we need to reuse data incase thread count is more than rows in CSV file, Set 'Stop thread on EOF' as True if we want to stop thread group execution if all CSV row data is executed.
+Open API call in which we want to use CSV data and keep details like this ${username}/${password}/${coutry} in headers where we want to use.

@@ -1,0 +1,26 @@
+Regular Expression Extractor -
+This is useful when we need to use response from earlier API call in the next API calls.
+
+For example before hitting any API call we need bearer token. In this case we first hit bearer token API call, grab bearer token in regular expression extractor variable and pass this variable to further API call.
+
+To add regular expression extractor in above scenario - Right click on Bearer Token API call - Post Processor - Regular Expression Extractor - Select details like 'Apply to', 'Field to check', Set 'Name of the variable'.
+Copy some common response from bearer token API call which we are getting (make sure field we need must be present in this common reponse) and paste in 'Regular Expression' section - Remove field which we want to grab and add this there (.+?).
+.+? - means to consider this section as variable.
+() - means first field.
+Set Template as $1$ and Match No. as 1 (as we are grabbing first match variable).
+Set Default Value as anything we reqired in case we get blank variable.
+
+Go to API call where we want to use this variable and pass variable name as ${bearerToken}.
+(If we set variable name as bearerToken)
+
+Debug Sampler - 
+To verify what value is in variable name then - 
+Right click on Thread Group - Sampler - 'Debug Sampler' - Add 'View Results Tree' Results - Run Thread - Check 'View Results Tree' results.
+ 
+IMP | We can grab 2 or more variables from single regular expression extractor. 
+Add Regular Expression Extractor under API call - Set 'Name', 'Comments', 'Apply to', 'Field to check', 'Name of created variable' and paste Regular expression in which we need to grab or more variables. 
+Add 'View Results Tree' result and 'Debug Sampler'.
+Run Thread - Open Debug Sampler section in View Result Tree - Notice there will be variable with name {}_g0, {}_g1, {}_g2 etc. 
+Use this variable name in API calls where we want to use.
+ 
+Website to check more details of regular expression - https://rexegg.com/regex-quickstart.html

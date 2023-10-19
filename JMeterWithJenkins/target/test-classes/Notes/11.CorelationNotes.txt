@@ -1,0 +1,13 @@
+Correlation - 
+Correlation means we are receiving dynamic value from previous API calls and keep them in Variables and pass to further API calls.
+
+For example - Before hitting any API call we generally need Authorisation token.
+Hence we first need to hit authorisation API call, grab bearer token using 'Regular Expression Extractor', keep it in Variable and pass this variable to futher API calls.
+
+To get value using 'Regular Expression Extractor' - 
+Right click on API call - Post Processor - Regular Expression Extractor.
+Set Name, Comments, Apply to, Field to Check, Name of created variable.
+To give 'Regular Expression' - Grab common response (having value which we want to grab) - Replace value which we want to grab with (.+?) - Set 'Template' as $1$ - Set 'Match No.' as 1. 
+This will grab value and set it in Variable which we set.
+
+To use this variable in futher API calls, simply open that API call and set variable name as ${variableName}. 

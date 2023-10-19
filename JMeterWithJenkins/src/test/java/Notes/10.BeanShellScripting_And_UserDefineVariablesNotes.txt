@@ -1,0 +1,55 @@
+BeanShell Scripting - 
+BeanShell scripting is mostly similar to JAVA.
+We have BeanShell PreProcessor and PostProcessor. 
+
+BeanShell PreProcessor - 
+With this we can get/edit variables define on Thread Group or on Test Plan level.
+We can define new variables, add value in it and can use in further API calls.
+We can add loops like IF-Else as well.
+
+BeanShell PostProcessor - 
+All things we do in PreProcess,we can do in PostProcessor as well.
+
+Logs Viewer - 
+Go to 'Options' - Set ON 'Log Viewer'.
+This will show all logs which we printed in BeanShell PreProcessor and PostProcessor. 
+
+User Defined Variables - 
+Variables which defined on 'Test Plan' level are 'User Defined Variables'.
+This variables we can use in all 'Thread Group' under that 'Test Plan'. 
+
+
+BeanShell Preprocessor Sample Code - 
+log.info(vars.get("country"));  //This line prints console output.
+String newUserName;             //This line will declare new string variable.
+log.info(ctx.getThreadNum()+" is the thread number"); //This line will return what thread is currently running.
+int prefix = ctx.getThreadNum()+15; //This line will get currentThreadNumber, adds 15 to it and assign sum to prefix variable.
+String country = vars.get("country"); //This line will get value in country variable and assign to contry variable string.
+
+if(country.equals("China"))      //This is If loop similar to JAVA.
+{
+	newUserName=prefix.toString()+vars.get("username")+"China";
+}
+else
+{
+	newUserName=prefix.toString()+vars.get("username");
+}
+vars.put("username", newUserName);     //This line will update existig variable and put value as newUserName.
+log.info("New UserName is "+newUserName);
+
+BeanShell PostProcessor Sample Code -
+log.info(prev.getResponseCode().toString());  //This line will print current thread response code.
+
+log.info(prev.getResponseMessage()); //This line will print current thread response message.
+
+if(prev.getResponseMessage().contains("unAuthorised"))
+{
+	log.info("Authentication issue");
+	props.put("result", "FAILED");  //This line will put 'FAILED' value in 'result' variable which is define of 'Test Plan' level i.e. 'User Defined Variable'.
+//This 'User Defined Variables' are on Test Plan level hence they will be used in every thread under that Test Plan.	
+}
+else
+{
+	log.info("Test Passed");
+	props.put("result", "PASSED");
+}

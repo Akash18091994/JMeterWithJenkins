@@ -1,0 +1,70 @@
+http://192.168.1.10:1080/webTours/
+Recording Controller - 
+When we do record and play, recorded steps are added under 'HTTP(s) Test Script Recorder', if we want to add this steps unders Controller then - 
+Add HTTP(s) Test Script Record -- Set 'Target Controller' as 'Use Recording Controller'  -- Add Thread Group -- Right click on Thread Group -- Add -- Controller -- Recording Controller.
+Start Recording -- perform steps and Stop. 
+Notice recorded steps will add under Recording Controller.
+
+
+Transaction Controller - 
+This is very ueful controller if we want to check max, min, throughput, error% etc information on module level.
+For example - We have requirement of doing performance of --> user login - flight search - Reservation.
+And in this case, we want to check max, min, throughput, error% etc information on module level. 
+
+To add transaction controller - 
+Add Thread Group --> Right click on Thread Group --> Logic Controller --> Transaction Controller 
+
+You can rename transaction controller as per your module name here in our case Login/Flight Seach/ Reservation.
+Add calls related to Login in Login Transaction controller similarly for Flight Seach and Reservation.
+
+Add Aggregate Report on Thread Group. 
+Click on each transaction controller and select 'Generate Paent Sample' (This will show module results in aggregate report, if we want to see results of module and its API calls then keep it OFF).
+Start execution --> Notice Results --> Module wise details are present.
+
+Simple Controller - 
+This controller is same as Transaction Controller only difference is that module wise results will not show in aggregate report.
+
+Module Controller - 
+As name suggested, from this controller we can controll modules.
+For example - If we want to run flow of Login - Flight Search - Reservation - LogOut.
+Here as per discuss above we will use transaction controller. 
+Now we got requirement that after Reservation we need to again Login - Flight Search - Reservation - LogOut.
+So to do this we dont need to add Transaction Controller again for same steps. 
+Just simply add Module Controller and Select which module we want to execute.
+In our case, we will add 4 module controller and set each module Login, Flight Search, Reservation, LogOut.
+
+Interleave Controller - 
+If we have requirement to perform below scenario - 
+1. Login -- London-Dubai Flight Search -- Reservation -- LogOut.
+2. Login -- Pune-New York Flight Search -- Reservation -- LogOut.
+Here in 2 steps only flight locations are change.
+We can use Interleave Controller here as follows - 
+1.Add Login Tranction Controller
+2.Add Interleave Controller - Add 2 Transaction Controller under it, one with API call of London-Dubai and Pune-New York Flight Search respectively.
+3.Add Reservation Tranction Controller.
+4.Add LogOut Tranction Controller. 
+5. In thread group set No of Threads = 1, Ramp-up Period = 1, Loop Count = 2.
+Run Test Plan. 
+Check Aggregate report, notice Login, Logout, Reservation modules have Samples 2 and London-Dubai and Pune-New York Flight Search have Sample 1. 
+i.e our requirement is succeesful.
+
+Runtime Controller - 
+With this controller, we can control module cotroller execution time.
+For example we want to execute this scenario Login - Flight Search - Reservation - LogOut.
+Here we have requirement that we want to execute Reservation module for 15 secs and other module as normal 1 time only.
+To achieve this - 
+Right click on Thread Group -- Runtime Controller --
+Move Reservation module controller under Runtime Controller -- Set Time as 15 sec -- Start Execution -- Notice Aggregate Report will show more Samples for Reservation module.
+
+Random Controller - 
+This controller is same as Interleave Controller only difference is in Interleave Controller executes each its child module controller top to bottom while in Random Controller it randomly executes any of child module controller.
+
+IF Controller - 
+Steps under this controller will execute if condition stated in IF controller are true.
+
+Loop Controller - 
+Steps under this controller will execute below Loop Count number of times.
+This controller is similar to Resevation RunTime Controller, difference is in loop we give number of loops and in Reservation Runtime ontroller we give number of seconds to run for steps under that controller.
+
+While Controller - 
+Steps under this controller will execute untill condition stated in While controller becomes false.

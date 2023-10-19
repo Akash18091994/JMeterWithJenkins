@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Run JMX File') {
+            steps {
+            //Below shell script commands are for creation of folder, go to JMeter bin folder and to run JMeter script respectively.
+                sh "mkdir -p /Users/shindea1/Documents/JMeterProject/UdemyPractise/Reports/${BUILD_NUMBER}"
+                sh "cd /Users/shindea1/Documents/Tools/apache-jmeter-5.5/bin"
+                sh "/Users/shindea1/Documents/Tools/apache-jmeter-5.5/bin/jmeter -jjmeter.save.saveservice.output_format=xml -n -t /Users/shindea1/Documents/JMeterProject/UdemyPractise/5.AssertionsCopy.jmx -l /Users/shindea1/Documents/JMeterProject/UdemyPractise/Reports/${BUILD_NUMBER}/reports.jtl -e -o /Users/shindea1/Documents/JMeterProject/UdemyPractise/Reports/${BUILD_NUMBER}/HTMLReport"
+            }
+        }
+        
+        stage('Get Reports') {
+            steps {
+                script {
+                /*With below groovy commands we are creating 'Performance Trend' which will show all graphs of average response time, throughput etc of all API calls in JMX file.
+                  With below commands, we are adding relative and absolute constraints. 
+                  Relative constraint will check Average response time of last 5 builds and check if current build average response should not be greater than 10% of last 5 builds.
+                  Absolute constraint willl check average response time of build should not be greater than 1000ms.*/
+                    echo "Getting reports"
+                    perfReport constraints: [   
+                        relative(escalationLevel: 'INFORMATION', meteredValue: 'AVERAGE', operator: 'NOT_GREATER', previousResultsBlock: previous(previousResultsString: '5', value: 'true'), relatedPerfReport: 'reports.jtl', success: false, tolerance: 10.0),
+                        absolute(escalationLevel: 'INFORMATION', meteredValue: 'AVERAGE', operator: 'NOT_GREATER', relatedPerfReport: 'reports.jtl', success: false, value: 1000)
+                    ],
+                    excludeResponseTime: true,
+                    filterRegex: '',
+                    ignoreFailedBuilds: true,
+                    ignoreUnstableBuilds: true,
+                    modeEvaluation: true,
+                    modePerformancePerTestCase: true,
+                    modeThroughput: true,
+                    showTrendGraphs: true,
+                    sourceDataFiles: "/Users/shindea1/Documents/JMeterProject/UdemyPractise/Reports/${BUILD_NUMBER}/reports.jtl"
+                }
+            }
+        }
+    }
+}
